@@ -60,6 +60,19 @@ AppAsset::register($this);
     NavBar::end();
     ?>
 
+<div  class="ui modal" id="alert_s_modal">
+  <div class="ui icon header" id="alert_s_header">
+    
+  </div>
+  <div class="content" id="alert_s_content">
+  </div>
+  <div class="actions">
+    <div class="ui green ok inverted button" onclick="closeModal('alert_s_modal')">
+      <i class="checkmark icon"></i>
+      好的
+    </div>
+  </div>
+</div>
     <div class="container">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
@@ -76,6 +89,25 @@ AppAsset::register($this);
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>
 </footer>
+<style>
+.modal-backdrop{
+    z-index:1;
+}
+</style>
+<script>
+function alertS(title,content){
+    $("#alert_s_header").html(title);
+    $("#alert_s_content").html(content);
+    $('#alert_s_modal')
+        .modal('show')
+    ;
+}
+function closeModal(id){
+    $('#'+id)
+        .modal('hide')
+    ;
+}
+</script>
 
 <?php $this->endBody() ?>
 </body>

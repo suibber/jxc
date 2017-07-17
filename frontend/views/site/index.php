@@ -2,50 +2,67 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'My Yii Application';
+$this->title = '进销存';
 ?>
 <div class="site-index">
 
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
-
     <div class="body-content">
-
         <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+            <div class="col-lg-3">
+                <h2>订单</h2>
+                <p>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
+                </p>
+                <p>
+                    <a class="btn btn-default" href="/flow-order/index">点击进入</a></p>
             </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+            <div class="col-lg-3">
+                <h2>入库</h2>
+                <p>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
+                </p>
+                <p>
+                    <a class="btn btn-default" href="/flow-in/index">点击进入</a></p>
             </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+            <div class="col-lg-3">
+                <h2>出库</h2>
+                <p>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+                </p>
+                <p>
+                    <a class="btn btn-default" href="/flow-out/index">点击进入</a></p>
+            </div>
+            <div class="col-lg-3">
+                <h2>销售</h2>
+                <p>
 
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+                </p>
+                <p>
+                    <a class="btn btn-default" href="/flow-sale/index">点击进入</a></p>
+            </div>
+            <div class="col-lg-3">
+                <h2>产品</h2>
+                <p>
+
+                </p>
+                <p>
+                    <a class="btn btn-default" href="/product/index">点击进入</a></p>
+            </div>
+            <div class="col-lg-3">
+                <h2>销售价格</h2>
+                <p>
+
+                </p>
+                <p>
+                    <a class="btn btn-default" href="/sale-price/index">点击进入</a></p>
+            </div>
+            <div class="col-lg-3">
+                <h2>客户</h2>
+                <p>
+
+                </p>
+                <p>
+                    <a class="btn btn-default" href="/customer/index">点击进入</a></p>
             </div>
         </div>
 
