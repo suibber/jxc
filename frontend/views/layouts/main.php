@@ -22,8 +22,9 @@ AppAsset::register($this);
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <?php $this->endBody() ?>
 </head>
-<body>
+<body onload="enable()">
 <?php $this->beginBody() ?>
 
 <div class="wrap">
@@ -86,7 +87,7 @@ AppAsset::register($this);
     <div class="container">
         <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
 
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <p class="pull-right">Powered</p>
     </div>
 </footer>
 <style>
@@ -94,6 +95,7 @@ AppAsset::register($this);
     z-index:1;
 }
 </style>
+
 <script>
 function alertS(title,content){
     $("#alert_s_header").html(title);
@@ -107,9 +109,12 @@ function closeModal(id){
         .modal('hide')
     ;
 }
+function enable(){
+    $('.dropdown').dropdown();
+    $('.ui.accordion').accordion();
+    $(".popupinfo").popup();
+}
 </script>
-
-<?php $this->endBody() ?>
 </body>
 </html>
 <?php $this->endPage() ?>

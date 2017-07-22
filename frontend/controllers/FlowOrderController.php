@@ -138,4 +138,37 @@ class FlowOrderController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    public function actionSaveBill()
+    {
+        $datas = Yii::$app->request->post();
+        $orderNumber = $datas['orderNumber'];
+        $productSuppliers = $datas['supplier'];
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        foreach ($datas as $k => $v) {
+            if (stripos($k, 'bill_number_')!==false) {
+                $id = str_ireplace('bill_number_', '', $k);
+                $model = new FlowOrder();
+                $model->order_number = $orderNumber;
+                $model->product_suppliers = $productSuppliers;
+                $model->created_at = date("Y-m-d H:i:s", time());
+                foreach ($datas as $k2 => $v2) {
+                    if (stripos($k2, '_'.$id)!==false) {
+                        $key = str_ireplace('_'.$id, '', $k2);
+                        $model->$key = $v2;
+                    }
+                }
+                if ($model->save()) {
+
+                } else {
+                    throw new \yii\base\Exception('保存数据失败。'.json_encode($model->getErrors()));
+                }
+            }
+        }
+        return [
+            'success' => true,
+            'redirect' => '/flow-order/index?sort=-id',
+        ];
+    }
 }

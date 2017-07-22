@@ -40,8 +40,7 @@ class FlowOrder extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['quantity'], 'integer'],
-            [['discount_price', 'order_price', 'product_price'], 'number'],
+            [['quantity', 'discount_price', 'order_price', 'product_price'], 'number'],
             [['created_at', 'updated_at'], 'safe'],
             [['number', 'order_number', 'bill_number', 'model', 'operator'], 'string', 'max' => 100],
             [['discount'], 'string', 'max' => 20],

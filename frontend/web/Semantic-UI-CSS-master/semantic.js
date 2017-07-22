@@ -5132,6 +5132,11 @@ $.fn.dropdown = function(parameters) {
               ? query
               : module.get.query(),
             results          =  null,
+            /// scmpf add start
+            scmpfFlag        = false,
+            scmpfReg         = /[^a-z0-9]/ig,
+            scmpfSearchFlag  = false,
+            /// scmf add end
             escapedTerm      = module.escape.string(searchTerm),
             beginsWithRegExp = new RegExp('^' + escapedTerm, 'igm')
           ;
@@ -5140,6 +5145,25 @@ $.fn.dropdown = function(parameters) {
             results = [];
 
             module.verbose('Searching for matching values', searchTerm);
+
+            /// scmpf add start
+            if ($item.length
+                && $item.length > 0
+                && $item.eq(0).data('pattern') == 'like') {
+                escapedTerm = escapedTerm.replace(scmpfReg, '');
+                //beginsWithRegExp = new RegExp(escapedTerm, 'igm');
+                beginsWithRegExp = new RegExp(searchTerm, 'igm');
+                scmpfFlag = true;
+            }
+            if ($item.length
+                && $item.length > 0
+                && $item.eq(0)
+                && $item.eq(0).data('flag') == 'suggestion') {
+                beginsWithRegExp = new RegExp('.*', 'igm');
+                scmpfSearchFlag = true;
+            }
+            /// scmf add end
+
             $item
               .each(function(){
                 var
@@ -5149,6 +5173,13 @@ $.fn.dropdown = function(parameters) {
                 ;
                 if(settings.match == 'both' || settings.match == 'text') {
                   text = String(module.get.choiceText($choice, false));
+
+                  /// scmpf add start
+                  if (scmpfFlag) {
+                    //text = text.replace(scmpfReg, '');
+                  }
+                  /// scmpf add end
+
                   if(text.search(beginsWithRegExp) !== -1) {
                     results.push(this);
                     return true;
@@ -5164,6 +5195,13 @@ $.fn.dropdown = function(parameters) {
                 }
                 if(settings.match == 'both' || settings.match == 'value') {
                   value = String(module.get.choiceValue($choice, text));
+
+                  /// scmpf add start
+                  if (scmpfFlag) {
+                    value = value.replace(scmpfReg, '');
+                  }
+                  /// scmpf add end
+
                   if(value.search(beginsWithRegExp) !== -1) {
                     results.push(this);
                     return true;
