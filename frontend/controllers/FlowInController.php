@@ -5,30 +5,16 @@ namespace frontend\controllers;
 use Yii;
 use common\models\FlowIn;
 use common\models\FlowInSearch;
-use yii\web\Controller;
+use common\models\Product;
+use frontend\controllers\Base;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * FlowInController implements the CRUD actions for FlowIn model.
  */
-class FlowInController extends Controller
+class FlowInController extends Base
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
-
     /**
      * Lists all FlowIn models.
      * @return mixed
@@ -72,6 +58,19 @@ class FlowInController extends Controller
                 'model' => $model,
             ]);
         }
+    }
+
+    public function actionCreateAuto()
+    {
+        $model = new FlowIn();
+        $data['orderNumber'] = FlowIn::generateNewInNumber();
+        $data['supplierList'] = Product::getAllSupplier();
+        $data['storeList'] = Yii::$app->params['storeList'];
+
+        return $this->render('create-auto', [
+            'model' => $model,
+            'data' => $data,
+        ]);
     }
 
     /**
@@ -120,5 +119,44 @@ class FlowInController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionSaveBill()
+    {
+        $datas = Yii::$app->request->post();
+        $orderNumber = $datas['orderNumber'];
+        $inNumber = $datas['inNumber'];
+        $inStore = $datas['inStore'];
+        $productSuppliers = $datas['supplier'];
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        foreach ($datas as $k => $v) {
+            if (stripos($k, 'bill_number_')!==false) {
+                $id = str_ireplace('bill_number_', '', $k);
+                $model = new FlowIn();
+                $model->in_number = $inNumber;
+                $model->order_number = $orderNumber;
+                $model->product_suppliers = $productSuppliers;
+                $model->product_suppliers_short = mb_substr($productSuppliers, 0, 13, 'utf-8');
+                $model->in_store = $inStore;
+                $model->created_at = date("Y-m-d H:i:s", time());
+                foreach ($datas as $k2 => $v2) {
+                    if (stripos($k2, '_'.$id)!==false) {
+                        $key = str_ireplace('_'.$id, '', $k2);
+                        $model->$key = $v2;
+                    }
+                }
+                if ($model->save()) {
+
+                } else {
+                    throw new Exception('保存数据失败。'
+                        .json_encode($model->getErrors()));
+                }
+            }
+        }
+        return [
+            'success' => true,
+            'redirect' => '/flow-in/index?sort=-id',
+        ];
     }
 }

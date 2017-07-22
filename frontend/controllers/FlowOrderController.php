@@ -6,30 +6,16 @@ use Yii;
 use common\models\FlowOrder;
 use common\models\FlowOrderSearch;
 use common\models\Product;
-use yii\web\Controller;
+use frontend\controllers\Base;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\base\Exception;
 
 /**
  * FlowOrderController implements the CRUD actions for FlowOrder model.
  */
-class FlowOrderController extends Controller
+class FlowOrderController extends Base
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
-
     /**
      * Lists all FlowOrder models.
      * @return mixed
@@ -162,13 +148,26 @@ class FlowOrderController extends Controller
                 if ($model->save()) {
 
                 } else {
-                    throw new \yii\base\Exception('保存数据失败。'.json_encode($model->getErrors()));
+                    throw new Exception('保存数据失败。'
+                        .json_encode($model->getErrors()));
                 }
             }
         }
         return [
             'success' => true,
             'redirect' => '/flow-order/index?sort=-id',
+        ];
+    }
+
+    public function actionGetOrderInfo()
+    {
+        $orderNumber = Yii::$app->request->post('order_number');
+        $model = Yii::$app->request->post('model');
+        $orderInfo = FlowOrder::getOrderInfoByOrderNumber($orderNumber, $model);
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return [
+            'success' => true,
+            'data' => $orderInfo,
         ];
     }
 }

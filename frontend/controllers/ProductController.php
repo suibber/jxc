@@ -131,4 +131,14 @@ class ProductController extends Controller
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return $info;
     }
+
+    public function actionGetProductInfoByNumber()
+    {
+        $productNumber = Yii::$app->request->post('productNumber');
+        $productNumber = trim($productNumber);
+        $info = Product::getProductInfoByNumber($productNumber);
+
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return $info;
+    }
 }

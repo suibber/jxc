@@ -90,4 +90,12 @@ class Product extends \yii\db\ActiveRecord
             ->one();
         return $info;
     }
+
+    public static function getProductInfoByNumber($number)
+    {
+        $info = Product::find()
+            ->where(['number' => $number])
+            ->one();
+        return $info;
+    }
 }

@@ -92,4 +92,15 @@ class FlowOrder extends \yii\db\ActiveRecord
         $order = isset($list[2]) ? ($list[2]+1) : 1;
         return 'Order-'.date("Ymd", time()).'-'.$order;
     }
+
+    public static function getOrderInfoByOrderNumber($orderNumber, $model='')
+    {
+        $info = FlowOrder::find()
+            ->where(['order_number' => $orderNumber]);
+        if ($model) {
+            $info = $info->andWhere(['like', 'model', $model]);
+        }
+        $info = $info->one();
+        return $info;
+    }
 }
