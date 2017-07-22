@@ -5,6 +5,8 @@ namespace frontend\controllers;
 use Yii;
 use common\models\FlowOut;
 use common\models\FlowOutSearch;
+use common\models\SalePrice;
+use frontend\controllers\Base;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -12,7 +14,7 @@ use yii\filters\VerbFilter;
 /**
  * FlowOutController implements the CRUD actions for FlowOut model.
  */
-class FlowOutController extends Controller
+class FlowOutController extends Base
 {
     /**
      * @inheritdoc
@@ -120,5 +122,55 @@ class FlowOutController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionCreateAuto()
+    {
+        $model = new FlowOut();
+        $data['orderNumber'] = FlowOut::generateNewInNumber();
+        $data['supplierList'] = SalePrice::getAllSales();
+        $data['storeList'] = Yii::$app->params['storeList'];
+
+        return $this->render('create-auto', [
+            'model' => $model,
+            'data' => $data,
+        ]);
+    }
+
+    public function actionSaveBill()
+    {
+        $datas = Yii::$app->request->post();
+        $outNumber = $datas['outNumber'];
+        $outStore = $datas['outStore'];
+        $receiver = $datas['supplier'];
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        foreach ($datas as $k => $v) {
+            if (stripos($k, 'bill_number_')!==false) {
+                $id = str_ireplace('bill_number_', '', $k);
+                $model = new FlowOut();
+                $model->out_number = $outNumber;
+                $model->receiver = $receiver;
+                $model->receiver_short = mb_substr($receiver, 0, 13, 'utf-8');
+                $model->out_store = $outStore;
+                $model->created_at = date("Y-m-d H:i:s", time());
+                foreach ($datas as $k2 => $v2) {
+                    if (stripos($k2, '_'.$id)!==false) {
+                        $key = str_ireplace('_'.$id, '', $k2);
+                        $model->$key = $v2;
+                    }
+                }
+                if ($model->save()) {
+
+                } else {
+                    throw new Exception('保存数据失败。'
+                        .json_encode($model->getErrors()));
+                }
+            }
+        }
+        return [
+            'success' => true,
+            'redirect' => '/flow-out/index?sort=-id',
+        ];
     }
 }

@@ -58,4 +58,15 @@ class SalePrice extends \yii\db\ActiveRecord
     {
         return new SalePriceQuery(get_called_class());
     }
+
+    public static function getAllSales()
+    {
+        $list = SalePrice::find()
+            ->distinct(['receiver'])
+            ->select(['receiver'])
+            ->where(['!=', 'receiver', ''])
+            ->asArray()
+            ->all();
+        return array_column($list, 'receiver');
+    }
 }

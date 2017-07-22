@@ -159,4 +159,19 @@ class FlowInController extends Base
             'redirect' => '/flow-in/index?sort=-id',
         ];
     }
+
+    public function actionGetInInfo()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $lotNumber = Yii::$app->request->post('lot_number');
+        $model = Yii::$app->request->post('model');
+        $info = FlowIn::find()
+            ->where(['lot_number' => $lotNumber])
+            ->andWhere(['like', 'model', $model])
+            ->one();
+        return [
+            'success' => true,
+            'data' => $info,
+        ];
+    }
 }
