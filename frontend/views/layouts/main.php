@@ -23,6 +23,11 @@ AppAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
     <?php $this->endBody() ?>
+    <style>
+        body {
+            overflow-x: scroll;
+        }
+    </style>
 </head>
 <body onload="enable()">
 <?php $this->beginBody() ?>

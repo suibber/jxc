@@ -40,6 +40,9 @@ $this->title = '进销存';
                 <p>
                     <a class="btn btn-default" href="/flow-sale/index">点击进入</a></p>
             </div>
+        </div>
+        <br><br>
+        <div class="row">
             <div class="col-lg-3">
                 <h2>产品</h2>
                 <p>
