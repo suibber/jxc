@@ -121,4 +121,19 @@ class SalePriceController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    public function actionGetSaleInfoByModelReceiver()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $model = trim(Yii::$app->request->post('model'));
+        $receiver = trim(Yii::$app->request->post('receiver'));
+        $info = SalePrice::find()
+            ->where(['like', 'receiver', $receiver])
+            ->andWhere(['like', 'model', $model])
+            ->one();
+        return [
+            'success' => true,
+            'data' => $info,
+        ];
+    }
 }

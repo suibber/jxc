@@ -121,4 +121,17 @@ class CustomerController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    public function actionGetCustomerInfoByCompany()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $company = Yii::$app->request->post('company');
+        $info = Customer::find()
+            ->where(['company' => $company])
+            ->one();
+        return [
+            'success' => true,
+            'data' => $info,
+        ];
+    }
 }

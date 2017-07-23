@@ -55,4 +55,15 @@ class Customer extends \yii\db\ActiveRecord
     {
         return new CustomerQuery(get_called_class());
     }
+
+    public static function getAllCustomers()
+    {
+        $list = Customer::find()
+            ->distinct(['company'])
+            ->select(['company'])
+            ->where(['!=', 'company', ''])
+            ->asArray()
+            ->all();
+        return array_column($list, 'company');
+    }
 }

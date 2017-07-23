@@ -86,4 +86,15 @@ class FlowSale extends \yii\db\ActiveRecord
     {
         return new FlowSaleQuery(get_called_class());
     }
+
+    public static function generateNewInNumber()
+    {
+        $latestOrder = FlowSale::find()
+            ->orderBy('id', SORT_DESC)
+            ->one();
+        $latestNumber = isset($latestOrder->order_number) ? $latestOrder->order_number : '';
+        $list = explode('-', $latestNumber);
+        $order = isset($list[2]) ? ($list[2]+1) : 1;
+        return 'Sell-'.date("Ymd", time()).'-'.$order;
+    }
 }
