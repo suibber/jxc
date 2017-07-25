@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\FlowOrder */
 
-$this->title = 'Create In Order';
+$this->title = '入库录入';
 $this->params['breadcrumbs'][] = ['label' => 'Flow Orders', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

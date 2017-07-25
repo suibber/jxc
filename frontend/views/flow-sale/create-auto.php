@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\FlowOrder */
 
-$this->title = 'Create In Order';
+$this->title = '销售录入';
 $this->params['breadcrumbs'][] = ['label' => 'Flow Orders', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="field">
                         <div class="ui dropdown" id="supplier-down">
                           <i class="filter icon"></i>
-                          <span class="text" id="supplier-value">筛选供应商</span>
+                          <span class="text" id="supplier-value">筛选客户</span>
                           <i class="dropdown icon"></i>
                           <div class="menu" id=''>
                             <div class="ui icon search input">
@@ -145,6 +145,7 @@ function setModel(data,id,model){
         dict,
         function(data){
             $("#product_name_"+id).val(data['name']);
+            $("#in_one_price_"+id).val(data['price']);
             setPrivce(id);
         }
     );
