@@ -82,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <tr class="bill">
         <td><input type="text" id="bill_number_1" class="bill_number" value="1" placeholder=""></td>
         <td><input type="text" id="code_one_1" onblur="setCodeOne(this,1)" placeholder=""></td>
-        <td><input type="text" id="code_two_1" placeholder=""></td>
+        <td><input type="text" id="code_two_1" onblur="setCodeTwo(this,1)" placeholder=""></td>
         <td><input type="text" id="model_1" onchange="setModel(this,1)" placeholder=""></td>
         <td><input type="text" id="product_name_1" placeholder=""><input type="hidden" id="type_1" placeholder=""></td>
         <td><input type="text" id="quantity_1" onblur="setPrivce(1)" placeholder=""></td>
@@ -114,7 +114,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <script>
 function addRow(){
     id = getLatestId() + 1;
-    var html = '<tr class="bill"><td><input type="text" id="bill_number_'+id+'" class="bill_number" value="'+id+'" placeholder=""></td><td><input type="text" id="code_one_'+id+'" onblur="setCodeOne(this,'+id+')" placeholder=""></td><td><input type="text" id="code_two_'+id+'" placeholder=""></td><td><input type="text" id="model_'+id+'" onchange="setModel(this,'+id+')" placeholder=""></td><td><input type="text" id="product_name_'+id+'" placeholder=""><input type="hidden" id="type_'+id+'" placeholder=""></td><td><input type="text" id="quantity_'+id+'" onblur="setPrivce('+id+')" placeholder=""></td><td><input type="text" id="in_one_price_'+id+'" onblur="setPrivce('+id+')" placeholder=""></td><td><input type="text" id="in_price_'+id+'" placeholder=""></td><td><input type="text" id="lot_number_'+id+'" placeholder=""></td><td><input type="text" id="expiration_date_one_'+id+'" placeholder=""></td><td><input type="text" id="comment_'+id+'" placeholder=""></td></tr>';
+    var html = '<tr class="bill"><td><input type="text" id="bill_number_'+id+'" class="bill_number" value="'+id+'" placeholder=""></td><td><input type="text" id="code_one_'+id+'" onblur="setCodeOne(this,'+id+')" placeholder=""></td><td><input type="text" id="code_two_'+id+'" onblur="setCodeTwo(this,'+id+')" placeholder=""></td><td><input type="text" id="model_'+id+'" onchange="setModel(this,'+id+')" placeholder=""></td><td><input type="text" id="product_name_'+id+'" placeholder=""><input type="hidden" id="type_'+id+'" placeholder=""></td><td><input type="text" id="quantity_'+id+'" onblur="setPrivce('+id+')" placeholder=""></td><td><input type="text" id="in_one_price_'+id+'" onblur="setPrivce('+id+')" placeholder=""></td><td><input type="text" id="in_price_'+id+'" placeholder=""></td><td><input type="text" id="lot_number_'+id+'" placeholder=""></td><td><input type="text" id="expiration_date_one_'+id+'" placeholder=""></td><td><input type="text" id="comment_'+id+'" placeholder=""></td></tr>';
     $("#default-bill").before(html);
 }
 
@@ -144,10 +144,88 @@ function setCodeOne(data,id){
             $("#model_"+id).val(model);
             $("#product_name_"+id).val(data['name']);
             $("#type_"+id).val(data['type']);
+            if (code) { 
+                var lot = getLotFromCodeOne(code);
+                $("#lot_number_"+id).val(lot);
+                var expiration = getExpirationFromCodeOne(code);
+                $("#expiration_date_one_"+id).val(expiration);
+            }
             setModel('',id,model)
         }
     );
     console.log(productNumber)
+}
+function setCodeTwo(data,id){
+    var code = $(data).val();
+    if (code) {
+        var lot = getLotFromCodeTwo(code);
+        $("#lot_number_"+id).val(lot);
+        var expiration = getExpirationFromCodeTwo(code);
+        $("#expiration_date_one_"+id).val(expiration);
+    }
+}
+function getLotFromCodeOne(code){
+    var codeLen = code.length;
+    var lot = '';
+    switch (codeLen) {
+        case 44:
+            lot = code.substr(-10);
+            break;
+        case 35:
+            lot = code.substr(-6);
+            break;
+        case 37:
+            lot = code.substr(-8);
+            break;
+        case 38:
+            lot = code.substr(-9);
+            break;
+        case 32:
+            lot = code.substr(-6);
+            break;
+    }
+    return lot;
+}
+function getExpirationFromCodeOne(code){
+    var codeLen = code.length;
+    var re = '';
+    if (codeLen==32||codeLen==35||codeLen==38||codeLen==44) {
+        re = code.substr(0,24);
+        re = re.substr(-6);
+    }
+    return re;
+}
+function getExpirationFromCodeTwo(code){
+    var codeLen = code.length;
+    var re = '';
+    switch (codeLen) {
+        case 17:
+            re = code.substr(0,8);
+            re = re.substr(-6);
+            break;
+        case 27:
+            re = code.substr(0,11);
+            re = re.substr(-6);
+            break;
+    }
+    return re;
+}
+function getLotFromCodeTwo(code){
+    var codeLen = code.length;
+    var lot = '';
+    switch (codeLen) {
+        case 20:
+            lot = code.substr(-10);
+            lot = lot.substr(0,8);
+            break;
+        case 17:
+            lot = code.substr(-7);
+            break;
+        case 27:
+            lot = code.substr(-10);
+            break;
+    }
+    return lot;
 }
 function setModel(data,id,model){
     if (!model){
