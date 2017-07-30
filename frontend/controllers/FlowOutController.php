@@ -4,12 +4,15 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\FlowOut;
+use common\models\FlowIn;
+use common\models\FlowSale;
 use common\models\FlowOutSearch;
 use common\models\SalePrice;
 use frontend\controllers\Base;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\Pagination;
 
 /**
  * FlowOutController implements the CRUD actions for FlowOut model.
@@ -172,5 +175,71 @@ class FlowOutController extends Base
             'success' => true,
             'redirect' => '/flow-out/index?sort=-id',
         ];
+    }
+
+    public function actionStore()
+    {
+        $query = FlowOut::find()
+            ->select("receiver,receiver_short,type,model,sum(quantity) quantity,sum(in_price) in_price")
+            ->orderBy(["type" => SORT_DESC])
+            ->groupBy("receiver,type,model");
+
+        $receiver = Yii::$app->request->get('receiver');
+        $type = Yii::$app->request->get('type');
+        $model = Yii::$app->request->get('model');
+        if ($receiver) {
+            $query = $query->andWhere(['like', 'receiver', $receiver]);
+        }
+        if ($type) {
+            $query = $query->andWhere(['like', 'type', $type]);
+        }
+        if ($model) {
+            $query = $query->andWhere(['like', 'model', $model]);
+        }
+
+        $pages =  new Pagination(['pageSize'=>Yii::$app->params['pageSize'],
+            'totalCount' => $query->count()]);
+
+        $list = $query->offset($pages->offset)
+            ->limit($pages->limit)->asArray()->all();
+
+        foreach ($list as $key => $item) {
+            $outInfo = FlowIn::find()
+                ->select("sum(quantity) quantity,sum(in_price) in_price")
+                ->where([
+                    'product_suppliers' => $item['receiver'],
+                    'type' => $item['type'],
+                    'model' => $item['model'],
+                ])
+                ->groupBy("product_suppliers,type,model")
+                ->asArray()
+                ->one();
+            $list[$key]['inin_quantity'] = 0;
+            $list[$key]['inin_price'] = 0;
+            if ($outInfo) { 
+                $list[$key]['inin_quantity'] = $outInfo['quantity'];
+                $list[$key]['inin_price'] = $outInfo['in_price'];
+            }
+            $saleInfo = FlowSale::find()
+                ->select("sum(quantity) quantity,sum(in_price) in_price")
+                ->where([
+                    'custom' => $item['receiver'],
+                    'model' => $item['model'],
+                ])
+                ->groupBy("custom,model")
+                ->asArray()
+                ->one();
+            $list[$key]['sale_quantity'] = 0;
+            $list[$key]['sale_price'] = 0;
+            if ($outInfo) { 
+                $list[$key]['sale_quantity'] = $saleInfo['quantity'];
+                $list[$key]['sale_price'] = $saleInfo['in_price'];
+            }
+        } 
+
+        return $this->render('store', [
+            'list' => $list,
+            'pages' => $pages,
+        ]);
     }
 }

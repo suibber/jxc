@@ -4,11 +4,13 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\FlowIn;
+use common\models\FlowOut;
 use common\models\FlowInSearch;
 use common\models\Product;
 use frontend\controllers\Base;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\Pagination;
 
 /**
  * FlowInController implements the CRUD actions for FlowIn model.
@@ -27,6 +29,56 @@ class FlowInController extends Base
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionStore()
+    {
+        $query = FlowIn::find()
+            ->select("in_store,type,model,sum(quantity) quantity,sum(in_price) in_price")
+            ->groupBy("in_store,type,model");
+
+        $in_store = Yii::$app->request->get('in_store');
+        $type = Yii::$app->request->get('type');
+        $model = Yii::$app->request->get('model');
+        if ($in_store) {
+            $query = $query->andWhere(['like', 'in_store', $in_store]);
+        }
+        if ($type) {
+            $query = $query->andWhere(['like', 'type', $type]);
+        }
+        if ($model) {
+            $query = $query->andWhere(['like', 'model', $model]);
+        }
+
+        $pages =  new Pagination(['pageSize'=>Yii::$app->params['pageSize'],
+            'totalCount' => $query->count()]);
+
+        $list = $query->offset($pages->offset)
+            ->limit($pages->limit)->asArray()->all();
+
+        foreach ($list as $key => $item) {
+            $outInfo = FlowOut::find()
+                ->select("sum(quantity) quantity,sum(in_price) in_price")
+                ->where([
+                    'out_store' => $item['in_store'],
+                    'type' => $item['type'],
+                    'model' => $item['model'],
+                ])
+                ->groupBy("out_store,type,model")
+                ->asArray()
+                ->one();
+            $list[$key]['out_quantity'] = 0;
+            $list[$key]['out_price'] = 0;
+            if ($outInfo) { 
+                $list[$key]['out_quantity'] = $outInfo['quantity'];
+                $list[$key]['out_price'] = $outInfo['in_price'];
+            }
+        } 
+
+        return $this->render('store', [
+            'list' => $list,
+            'pages' => $pages,
         ]);
     }
 
