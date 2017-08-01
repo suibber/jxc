@@ -6,10 +6,12 @@ use Yii;
 use common\models\FlowOrder;
 use common\models\FlowOrderSearch;
 use common\models\Product;
+use common\models\FlowIn;
 use frontend\controllers\Base;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\base\Exception;
+use yii\data\Pagination;
 
 /**
  * FlowOrderController implements the CRUD actions for FlowOrder model.
@@ -169,5 +171,80 @@ class FlowOrderController extends Base
             'success' => true,
             'data' => $orderInfo,
         ];
+    }
+
+    public function actionStore()
+    {
+        $query = FlowOrder::find()
+            ->select("order_number,sum(quantity) quantity,sum(order_price) order_price,pay_percent,pay_price,pay_price_not,pay_time,pay_status,bill_number2,bill_price,bill_time,bill_status,arrival_status,detail_comment,product_suppliers")
+            ->groupBy("order_number");
+
+        $in_store = Yii::$app->request->get('in_store');
+        $type = Yii::$app->request->get('type');
+        $model = Yii::$app->request->get('model');
+        if ($in_store) {
+            $query = $query->andWhere(['like', 'order_number', $in_store]);
+        }
+        if ($type) {
+            $query = $query->andWhere(['like', 'product_suppliers', $type]);
+        }
+
+        $pages =  new Pagination(['pageSize'=>Yii::$app->params['pageSize'],
+            'totalCount' => $query->count()]);
+
+        $list = $query->offset($pages->offset)
+            ->limit($pages->limit)->asArray()->all();
+
+        foreach ($list as $key => $item) {
+            $outInfo = FlowIn::find()
+                ->select("sum(quantity) quantity,sum(in_price) in_price")
+                ->where([
+                    'order_number' => $item['order_number'],
+                ])
+                ->groupBy("number")
+                ->asArray()
+                ->one();
+            $list[$key]['in_quantity'] = 0;
+            $list[$key]['in_price'] = 0;
+            if ($outInfo) { 
+                $list[$key]['in_quantity'] = $outInfo['quantity'];
+                $list[$key]['in_price'] = $outInfo['in_price'];
+            }
+            $arrival_status = '';
+            if ($list[$key]['in_quantity']==$list[$key]['quantity']) {
+                $arrival_status = '全部到货';
+            } else if (!$list[$key]['in_quantity']) {
+                $arrival_status = '未到货';
+            } else {
+                $arrival_status = '部分到货';
+            }
+            FlowOrder::updateAll(['arrival_status' => $arrival_status], ['order_number' => $item['order_number']]);
+        }
+
+        return $this->render('store', [
+            'list' => $list,
+            'pages' => $pages,
+        ]);
+    }
+
+    public function actionSetPercent()
+    {
+        $data['pay_percent'] = Yii::$app->request->post('pay_percent');
+        $data['pay_price'] = Yii::$app->request->post('pay_price');
+        $data['pay_price_not'] = Yii::$app->request->post('pay_price_not');
+        $data['pay_status'] = Yii::$app->request->post('pay_status');
+        $data['pay_time'] = date("Y-m-d H:i:s", time());
+        $order_id = Yii::$app->request->post('order_id');
+        FlowOrder::updateAll($data, ['order_number' => $order_id]);
+    }
+
+    public function actionSetBill()
+    {
+        $data['bill_number2'] = Yii::$app->request->post('bill_number2');
+        $data['bill_price'] = Yii::$app->request->post('bill_price');
+        $data['bill_status'] = Yii::$app->request->post('bill_status');
+        $data['bill_time'] = Yii::$app->request->post('bill_time');
+        $order_id = Yii::$app->request->post('order_id');
+        FlowOrder::updateAll($data, ['order_number' => $order_id]);
     }
 }
