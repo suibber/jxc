@@ -52,6 +52,14 @@ $this->title = '亨通瑞鑫（北京）科技有限公司出入库管理系统'
                     <a class="btn btn-default" href="/flow-order/store">点击进入</a></p>
             </div>
             <div class="col-lg-3">
+                <h2>销售状态明细</h2>
+                <p>
+
+                </p>
+                <p>
+                    <a class="btn btn-default" href="/flow-sale/store">点击进入</a></p>
+            </div>
+            <div class="col-lg-3">
                 <h2>公司库存查询</h2>
                 <p>
 

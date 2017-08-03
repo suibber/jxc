@@ -9,6 +9,7 @@ use common\models\Customer;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\Pagination;
 
 /**
  * FlowSaleController implements the CRUD actions for FlowSale model.
@@ -171,5 +172,44 @@ class FlowSaleController extends Controller
             'success' => true,
             'redirect' => '/flow-sale/index?sort=-id',
         ];
+    }
+
+    public function actionStore()
+    {
+        $query = FlowSale::find()
+            ->select("sale_number,custom,sum(quantity) quantity,sum(sale_price) sale_price,salesman,bill_number2,bill_price,bill_status,reture_price,return_time,return_status")
+            ->groupBy("sale_number");
+
+        $sale_number = Yii::$app->request->get('in_store');
+        $custom = Yii::$app->request->get('type');
+        if ($sale_number) {
+            $query = $query->andWhere(['like', 'sale_number', $sale_number]);
+        }
+        if ($custom) {
+            $query = $query->andWhere(['like', 'custom', $custom]);
+        }
+
+        $pages =  new Pagination(['pageSize'=>Yii::$app->params['pageSize'],
+            'totalCount' => $query->count()]);
+
+        $list = $query->offset($pages->offset)
+            ->limit($pages->limit)->asArray()->all();
+
+        return $this->render('store', [
+            'list' => $list,
+            'pages' => $pages,
+        ]);
+    }
+
+    public function actionSetBill()
+    {
+        $data['bill_number2'] = Yii::$app->request->post('bill_number2');
+        $data['bill_price'] = Yii::$app->request->post('bill_price');
+        $data['bill_status'] = Yii::$app->request->post('bill_status');
+        $data['reture_price'] = Yii::$app->request->post('reture_price');
+        $data['return_time'] = Yii::$app->request->post('return_time');
+        $data['return_status'] = Yii::$app->request->post('return_status');
+        $sale_number = Yii::$app->request->post('sale_number');
+        FlowSale::updateAll($data, ['sale_number' => $sale_number]);
     }
 }
