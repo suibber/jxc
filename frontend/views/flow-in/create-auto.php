@@ -282,7 +282,7 @@ function preview(){
         dict,
         function(data){
             if (data['success']) {
-                window.location.href = data['redirect'];
+                window.open(data['redirect']);
             }
         }
     );

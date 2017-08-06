@@ -208,11 +208,11 @@ function save(){
 function preview(){
     var dict = getPostData();
     $.post(
-        '/flow-out/preview-bill',
+        '/flow-sale/preview-bill',
         dict,
         function(data){
             if (data['success']) {
-                window.location.href = data['redirect'];
+                window.open(data['redirect']);
             }
         }
     );

@@ -35,7 +35,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => '出入库管理系统',
+        'brandLabel' => '<img src="/images/logo.png" style="height:35px;float:left;padding-right:10px;margin-top:-5px;">出入库管理系统',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',

@@ -100,7 +100,7 @@ class FlowIn extends \yii\db\ActiveRecord
     public static function generateNewInNumber()
     {
         $latestOrder = FlowIn::find()
-            ->orderBy('id', SORT_DESC)
+            ->orderBy(['id' => SORT_DESC])
             ->one();
         $latestNumber = isset($latestOrder->order_number) ? $latestOrder->order_number : '';
         $list = explode('-', $latestNumber);

@@ -174,6 +174,35 @@ class FlowSaleController extends Controller
         ];
     }
 
+    public function actionPreviewBill()
+    {
+        $datas = Yii::$app->request->post();
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $list = [];
+        foreach ($datas as $k => $v) {
+            if (stripos($k, 'bill_number_')!==false) {
+                $id = str_ireplace('bill_number_', '', $k);
+                foreach ($datas as $k2 => $v2) {
+                    if (stripos($k2, '_'.$id)!==false) {
+                        $key = str_ireplace('_'.$id, '', $k2);
+                        $list[$k][$key] = $v2;
+                    }
+                }
+            }
+        }
+        $view = $this->renderPartial('preview', [
+            'datas' => $datas,
+            'list' => $list,
+        ]);
+        $cacheKey = MD5($view);
+        Yii::$app->cache->set($cacheKey, $view);
+        return [
+            'success' => true,
+            'redirect' => '/flow-order/preview-bill-real?key='.$cacheKey,
+        ];
+    }
+
     public function actionStore()
     {
         $query = FlowSale::find()
