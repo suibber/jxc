@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="inline fields">
             <div class="four wide column">订单号：</div>
             <div class="twelve wide column">
-                <input name="first-name" placeholder="" type="text" value="<?=$data['orderNumber']?>">
+                <input name="first-name" placeholder="" type="text" value="<?=$data['orderNumber']?>" id="orderNumber">
             </div>
         </div>
         <div class="inline fields">
@@ -52,9 +52,9 @@ $this->params['breadcrumbs'][] = $this->title;
   <thead>
     <tr>
       <th>单据序号</th>
-      <th>产品型号</th>
+      <th style="width:30%">产品型号</th>
       <th>数量</th>
-      <th>折扣(75代表75%)</th>
+      <th>折扣（%）</th>
       <th>产品名称</th>
       <th>标准单价</th>
       <th>折扣单价</th>
@@ -69,9 +69,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <td><input type="text" id="quantity_1" onblur="setPrivce(1)" placeholder=""></td>
         <td><input type="text" id="discount_1" onblur="setPrivce(1)" placeholder="" value="100"></td>
         <td><input type="text" id="product_name_1" placeholder=""></td>
-        <td><input type="text" id="product_price_1" placeholder=""></td>
-        <td><input type="text" id="discount_price_1" placeholder=""></td>
-        <td><input type="text" id="order_price_1" placeholder=""></td>
+        <td><input type="text" id="product_price_1" placeholder="0.00"></td>
+        <td><input type="text" id="discount_price_1" placeholder="0.00"></td>
+        <td><input type="text" id="order_price_1" placeholder="0.00"></td>
         <td><input type="text" id="comment_1" placeholder=""></td>
     </tr>
     <tr id="default-bill"></tr>
@@ -135,8 +135,10 @@ function setPrivce(id){
     var product_price = $("#product_price_"+id).val();
     if (quantity && discount && product_price) {
         discount_price = product_price * (discount/100);
-        discount_price = Math.round(discount_price*100)/100;
+        discount_price = (discount_price*100)/100;
+        discount_price = discount_price.toFixed(2);
         order_price = discount_price * quantity;        
+        order_price = order_price.toFixed(2);
         $("#discount_price_"+id).val(discount_price);
         $("#order_price_"+id).val(order_price);
     }
@@ -171,7 +173,7 @@ function preview(){
 function getPostData(){
     var inputs = $(".bill input");
     var dict = {};
-    dict['orderNumber'] = '<?=$data['orderNumber']?>';
+    dict['orderNumber'] = $("#orderNumber").val();
     dict['supplier'] = $("#supplier").val();
     for (var i=0;i<inputs.length;i++){
         var bill_item = inputs[i];

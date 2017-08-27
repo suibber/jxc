@@ -92,7 +92,7 @@ class FlowSale extends \yii\db\ActiveRecord
         $latestOrder = FlowSale::find()
             ->orderBy(['id' => SORT_DESC])
             ->one();
-        $latestNumber = isset($latestOrder->order_number) ? $latestOrder->order_number : '';
+        $latestNumber = isset($latestOrder->sale_number) ? $latestOrder->sale_number : '';
         $list = explode('-', $latestNumber);
         $order = isset($list[2]) ? ($list[2]+1) : 1;
         return 'Sell-'.date("Ymd", time()).'-'.$order;

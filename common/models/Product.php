@@ -96,6 +96,13 @@ class Product extends \yii\db\ActiveRecord
         $info = Product::find()
             ->where(['number' => $number])
             ->one();
+        $model = isset($info->model) ? $info->model : 0;
+        if ($model) { 
+            $info = Product::find()
+                ->where(['model' => $model])
+                ->orderBy(['name' => SORT_DESC])
+                ->one();
+        }
         return $info;
     }
 }

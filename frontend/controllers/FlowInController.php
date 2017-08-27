@@ -51,8 +51,41 @@ class FlowInController extends Base
             $query = $query->andWhere(['like', 'model', $model]);
         }
 
+        // 计算sum - start
+        $listAll = $query
+            ->limit(1000)
+            ->asArray()->all();
+        $countQuantity = 0;
+        $countPrice = 0.00;
+        foreach ($listAll as $key => $item) {
+            $outInfo = FlowOut::find()
+                ->select("sum(quantity) quantity,sum(in_price) in_price")
+                ->where([
+                    'out_store' => $item['in_store'],
+                    'type' => $item['type'],
+                    'model' => $item['model'],
+                ])
+                ->groupBy("out_store,type,model")
+                ->asArray()
+                ->one();
+            $storeQuantity = 0;
+            $storePrice = 0;
+            $outQuantity = 0;
+            $outPrice = 0.00;
+            if ($outInfo) { 
+                $outQuantity = $outInfo['quantity'];
+                $outPrice = $outInfo['in_price'];
+            }
+            $storeQuantity = $item['quantity'] - $outQuantity;
+            $storePrice = $item['in_price'] - $outPrice;
+            $countQuantity += $storeQuantity;
+            $countPrice += $storePrice;
+        } 
+        // 计算sum - end
+
+        $count = $query->count();
         $pages =  new Pagination(['pageSize'=>Yii::$app->params['pageSize'],
-            'totalCount' => $query->count()]);
+            'totalCount' => $count]);
 
         $list = $query->offset($pages->offset)
             ->limit($pages->limit)->asArray()->all();
@@ -79,6 +112,9 @@ class FlowInController extends Base
         return $this->render('store', [
             'list' => $list,
             'pages' => $pages,
+            'count' => $count,
+            'countQuantity' => $countQuantity,
+            'countPrice' => $countPrice,
         ]);
     }
 
@@ -193,7 +229,8 @@ class FlowInController extends Base
                 $model->in_store = $inStore;
                 $model->created_at = date("Y-m-d H:i:s", time());
                 foreach ($datas as $k2 => $v2) {
-                    if (stripos($k2, '_'.$id)!==false) {
+                    $number = array_pop(explode("_", $k2));
+                    if ($number == $id) {
                         $key = str_ireplace('_'.$id, '', $k2);
                         $model->$key = $v2;
                     }

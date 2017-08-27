@@ -158,7 +158,9 @@ class FlowOutController extends Base
                 $model->out_store = $outStore;
                 $model->created_at = date("Y-m-d H:i:s", time());
                 foreach ($datas as $k2 => $v2) {
-                    if (stripos($k2, '_'.$id)!==false) {
+                    $number = array_pop(explode("_", $k2));
+                    if ($number == $id) {
+                    //if (stripos($k2, '_'.$id)!==false) {
                         $key = str_ireplace('_'.$id, '', $k2);
                         $model->$key = $v2;
                     }

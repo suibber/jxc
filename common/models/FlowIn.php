@@ -102,7 +102,7 @@ class FlowIn extends \yii\db\ActiveRecord
         $latestOrder = FlowIn::find()
             ->orderBy(['id' => SORT_DESC])
             ->one();
-        $latestNumber = isset($latestOrder->order_number) ? $latestOrder->order_number : '';
+        $latestNumber = isset($latestOrder->in_number) ? $latestOrder->in_number : '';
         $list = explode('-', $latestNumber);
         $order = isset($list[2]) ? ($list[2]+1) : 1;
         return 'In-'.date("Ymd", time()).'-'.$order;

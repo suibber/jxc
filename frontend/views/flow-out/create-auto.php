@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="inline fields">
             <div class="four wide column">出库单号：</div>
             <div class="twelve wide column">
-                <input name="first-name" placeholder="" type="text" value="<?=$data['orderNumber']?>">
+                <input name="first-name" placeholder="" type="text" value="<?=$data['orderNumber']?>" id="orderNumber">
             </div>
         </div>
         <div class="inline fields">
@@ -174,6 +174,7 @@ function setPrivce(id){
     var in_one_price = $("#in_one_price_"+id).val();
     var quantity = $("#quantity_"+id).val();
     var in_price = in_one_price * quantity;
+    in_price= in_price.toFixed(2);
     $("#in_price_"+id).val(in_price);
 }
 $("#supplier-down").on('click',function(){
@@ -206,7 +207,7 @@ function preview(){
 function getPostData(){
     var inputs = $(".bill input");
     var dict = {};
-    dict['outNumber'] = '<?=$data['orderNumber']?>';
+    dict['outNumber'] = $("#orderNumber").val();
     dict['supplier'] = $("#supplier").val();
     dict['orderNumber'] = $("#order_number").val();
     dict['outStore'] = $("#outStore").val();

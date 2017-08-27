@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="inline fields">
             <div class="four wide column">销售单号：</div>
             <div class="twelve wide column">
-                <input name="first-name" placeholder="" type="text" value="<?=$data['orderNumber']?>">
+                <input name="first-name" placeholder="" type="text" value="<?=$data['orderNumber']?>" id="orderNumber">
             </div>
         </div>
         <div class="inline fields">
@@ -179,6 +179,7 @@ function setPrivce(id){
     var in_one_price = $("#in_one_price_"+id).val();
     var quantity = $("#quantity_"+id).val();
     var in_price = in_one_price * quantity;
+    in_price= in_price.toFixed(2);
     $("#in_price_"+id).val(in_price);
     setSalePrivce(id)
 }
@@ -186,6 +187,7 @@ function setSalePrivce(id){
     var sale_one_price = $("#sale_one_price_"+id).val();
     var quantity = $("#quantity_"+id).val();
     var sale_price = sale_one_price * quantity;
+    sale_price = sale_price.toFixed(2);
     $("#sale_price_"+id).val(sale_price);
 }
 $("#supplier-down").on('click',function(){
@@ -220,7 +222,7 @@ function preview(){
 function getPostData(){
     var inputs = $(".bill input");
     var dict = {};
-    dict['saleNumber'] = '<?=$data['orderNumber']?>';
+    dict['saleNumber'] = $("#orderNumber").val();
     dict['custom'] = $("#supplier").val();
     dict['salesman'] = $("#customer").val();
     for (var i=0;i<inputs.length;i++){

@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="inline fields">
             <div class="four wide column">入库单号：</div>
             <div class="twelve wide column">
-                <input name="first-name" placeholder="" type="text" value="<?=$data['orderNumber']?>">
+                <input name="first-name" placeholder="" id="orderNumber" type="text" value="<?=$data['orderNumber']?>">
             </div>
         </div>
         <div class="inline fields">
@@ -148,6 +148,7 @@ function setCodeOne(data,id){
                 var lot = getLotFromCodeOne(code);
                 $("#lot_number_"+id).val(lot);
                 var expiration = getExpirationFromCodeOne(code);
+                expiration = parseExpiration(expiration);
                 $("#expiration_date_one_"+id).val(expiration);
             }
             setModel('',id,model)
@@ -161,6 +162,7 @@ function setCodeTwo(data,id){
         var lot = getLotFromCodeTwo(code);
         $("#lot_number_"+id).val(lot);
         var expiration = getExpirationFromCodeTwo(code);
+        expiration = parseExpiration(expiration);
         $("#expiration_date_one_"+id).val(expiration);
     }
 }
@@ -258,6 +260,7 @@ function setPrivce(id){
     var in_one_price = $("#in_one_price_"+id).val();
     var quantity = $("#quantity_"+id).val();
     var in_price = in_one_price * quantity;
+    in_price = in_price.toFixed(2);
     $("#in_price_"+id).val(in_price);
 }
 $("#supplier-down").on('click',function(){
@@ -290,7 +293,7 @@ function preview(){
 function getPostData(){
     var inputs = $(".bill input");
     var dict = {};
-    dict['inNumber'] = '<?=$data['orderNumber']?>';
+    dict['inNumber'] = $("#orderNumber").val();
     dict['supplier'] = $("#supplier").val();
     dict['orderNumber'] = $("#order_number").val();
     dict['inStore'] = $("#inStore").val();
@@ -301,5 +304,13 @@ function getPostData(){
         dict[bill_key] = bill_value;
     }
     return dict;
+}
+function parseExpiration(expiration){
+    if (expiration.length==6) {
+        var y = '20'+expiration.substr(0,2);
+        var m = expiration.substr(2,2);
+        var d = expiration.substr(-2);
+        return y+'-'+m+'-'+d;
+    }
 }
 </script>

@@ -8,7 +8,7 @@ use yii\widgets\LinkPager;
 /* @var $searchModel common\models\FlowInSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '公司库存查询';
+$this->title = '公司库存查询'.'（共'.$count.'条数据）';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="flow-in-index">
@@ -24,6 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <th>入库数量</th>
                     <th>入库金额</th>
                     <th>出库金额</th>
+                    <th>出库数量</th>
                     <th>库存数量</th>
                     <th>库存金额</th>
                 </tr>
@@ -41,7 +42,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td></td>
+                    <td>总：<?=$countQuantity?><br/ >1000条内有效</td>
+                    <td>总：<?=$countPrice?><br/ >1000条内有效</td>
                 </tr>
             </thead>
             <tbody>
@@ -53,6 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <td><?=$item['quantity']?></td>
                     <td><?=$item['in_price']?></td>
                     <td><?=$item['out_price']?></td>
+                    <td><?=$item['out_quantity']?></td>
                     <td><?=$item['quantity']-$item['out_quantity']?></td>
                     <td><?=$item['in_price']-$item['out_price']?></td>
                 </tr>
