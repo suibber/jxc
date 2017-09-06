@@ -42,12 +42,11 @@ class FlowSale extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['quantity'], 'integer'],
             [['in_one_price', 'in_price', 'sale_one_price', 'sale_price'], 'number'],
             [['created_at', 'updated_at'], 'safe'],
             [['number', 'sale_number', 'bill_number', 'model', 'operator'], 'string', 'max' => 100],
             [['comment', 'custom', 'product_name'], 'string', 'max' => 400],
-            [['custom_short', 'salesman'], 'string', 'max' => 200],
+            [['custom_short', 'salesman', 'quantity'], 'string', 'max' => 200],
         ];
     }
 

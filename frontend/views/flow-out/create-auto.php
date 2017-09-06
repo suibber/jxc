@@ -129,6 +129,8 @@ function getLatestId(){
 function setCodeOne(data,id){
     var code = $(data).val();
     var productNumber = code.substr(0,16);
+    var log_number = getLotFromCodeOne(code);
+    $("#lot_number_"+id).val(log_number);
     var dict = {'productNumber':productNumber};
     $.post(
         '/product/get-product-info-by-number',
@@ -143,6 +145,28 @@ function setCodeOne(data,id){
     );
     console.log(productNumber)
 }
+function getLotFromCodeOne(code){
+    var codeLen = code.length;
+    var lot = '';
+    switch (codeLen) {
+        case 44:
+            lot = code.substr(-10);
+            break;
+        case 35:
+            lot = code.substr(-6);
+            break;
+        case 37:
+            lot = code.substr(-8);
+            break;
+        case 38:
+            lot = code.substr(-9);
+            break;
+        case 32:
+            lot = code.substr(-6);
+            break;
+    }
+    return lot;
+}
 function setModel(data,id,model){
     if (!model){
         var model = $("#model_"+id).val();
@@ -155,6 +179,7 @@ function setModel(data,id,model){
         function(data){
             $("#in_one_price_"+id).val(data['data']['in_one_price']);
             $("#expiration_date_one_"+id).val(data['data']['expiration_date_one']);
+            $("#product_name_"+id).val(data['data']['product_name']);
             setPrivce(id);
         }
     );

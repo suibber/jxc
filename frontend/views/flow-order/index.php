@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format'=> 'raw',
                 'attribute'=> 'discount',
                 'value' => function($model){
-                    return ($model->discount*100)."%";
+                    return round($model->discount, 2)."%";
                 },
             ],
             'discount_price',

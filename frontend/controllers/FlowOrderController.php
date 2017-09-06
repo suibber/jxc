@@ -206,6 +206,14 @@ class FlowOrderController extends Base
         $orderNumber = Yii::$app->request->post('order_number');
         $model = Yii::$app->request->post('model');
         $orderInfo = FlowOrder::getOrderInfoByOrderNumber($orderNumber, $model);
+        if (!$orderInfo) {
+            $orderInfo = Product::find()
+                ->where(['like', 'model', $model])
+                ->asArray()
+                ->one();
+            $orderInfo['discount_price'] = $orderInfo['price'];
+            $orderInfo['product_name'] = $orderInfo['name'];
+        }
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return [
             'success' => true,

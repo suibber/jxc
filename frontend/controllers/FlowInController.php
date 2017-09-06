@@ -289,6 +289,14 @@ class FlowInController extends Base
             ->where(['lot_number' => $lotNumber])
             ->andWhere(['like', 'model', $model])
             ->one();
+        if (!$info) {
+            $info = Product::find()
+                ->where(['like', 'model', $model])
+                ->asArray()
+                ->one();
+            $info['in_one_price'] = $info['price'];
+            $info['product_name'] = $info['name'];
+        }
         return [
             'success' => true,
             'data' => $info,

@@ -165,7 +165,7 @@ class FlowSaleController extends Controller
                 if ($model->save()) {
 
                 } else {
-                    throw new Exception('保存数据失败。'
+                    throw new \Exception('保存数据失败。'
                         .json_encode($model->getErrors()));
                 }
             }
