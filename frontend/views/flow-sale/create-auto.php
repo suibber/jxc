@@ -161,6 +161,9 @@ function setSale(id){
         function(data){
             $("#sale_one_price_"+id).val(data['data']['price']);
             setSalePrivce(id);
+            if (data['data']['sales']) {
+                $("#customer").val(data['data']['sales']);
+            }
         }
     );
 }

@@ -41,6 +41,7 @@ class FlowInController extends Base
         $in_store = Yii::$app->request->get('in_store');
         $type = Yii::$app->request->get('type');
         $model = Yii::$app->request->get('model');
+        $model = str_ireplace("  ", " +", $model);
         if ($in_store) {
             $query = $query->andWhere(['like', 'in_store', $in_store]);
         }

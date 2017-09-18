@@ -220,6 +220,7 @@ class FlowOutController extends Base
         $receiver = Yii::$app->request->get('receiver');
         $type = Yii::$app->request->get('type');
         $model = Yii::$app->request->get('model');
+        $model = str_ireplace("  ", " +", $model);
         if ($receiver) {
             $query = $query->andWhere(['like', 'receiver', $receiver]);
         }

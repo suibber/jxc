@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <input type="text" class="form-control search" id="type" value="<?=Yii::$app->request->get('type')?>">
                     </td>
                     <td>
-                        <input type="text" class="form-control search" id="model" value="<?=Yii::$app->request->get('model')?>">
+                        <input type="text" class="form-control search" id="model" value="<?=str_ireplace("  ", " +", Yii::$app->request->get('model'))?>">
                     </td>
                     <td></td>
                     <td></td>

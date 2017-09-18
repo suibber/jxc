@@ -177,6 +177,7 @@ function setModel(data,id,model){
         '/flow-in/get-in-info',
         dict,
         function(data){
+            $("#type_"+id).val(data['data']['type']);
             $("#in_one_price_"+id).val(data['data']['in_one_price']);
             $("#expiration_date_one_"+id).val(data['data']['expiration_date_one']);
             $("#product_name_"+id).val(data['data']['product_name']);

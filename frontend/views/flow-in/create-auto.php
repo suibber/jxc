@@ -239,6 +239,7 @@ function setModel(data,id,model){
         '/flow-order/get-order-info',
         dict,
         function(data){
+            $("#type_"+id).val(data['data']['type']);
             $("#in_one_price_"+id).val(data['data']['discount_price']);
             $("#product_name_"+id).val(data['data']['product_name']);
             setPrivce(id);
