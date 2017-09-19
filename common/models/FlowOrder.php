@@ -100,7 +100,7 @@ class FlowOrder extends \yii\db\ActiveRecord
         if ($model) {
             $info = $info->andWhere(['like', 'model', $model]);
         }
-        $info = $info->one();
+        $info = $info->asArray()->one();
         return $info;
     }
 }

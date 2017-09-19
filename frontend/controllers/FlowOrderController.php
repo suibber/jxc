@@ -214,6 +214,12 @@ class FlowOrderController extends Base
                 ->one();
             $orderInfo['discount_price'] = $orderInfo['price'];
             $orderInfo['product_name'] = $orderInfo['name'];
+        } else {
+            $orderInfo2 = Product::find()
+                ->where(['like', 'model', $model])
+                ->asArray()
+                ->one();
+            $orderInfo['type'] = $orderInfo2['type'];
         }
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return [
