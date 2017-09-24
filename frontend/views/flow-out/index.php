@@ -24,21 +24,42 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
 //            ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+//            'id',
             //'number',
             'out_number',
             'bill_number',
             'out_store',
-            'receiver',
+            [
+                'label' => '收货方',
+                'format'=> 'raw',
+                'attribute'=> 'receiver',
+                'value' => function($model){
+                    return "<span style='font-size:8px;'>".$model->receiver."</span>";
+                },
+            ],
             'model',
-            'product_name',
+            [
+                'label' => '产品名称',
+                'format'=> 'raw',
+                'attribute'=> 'product_name',
+                'value' => function($model){
+                    return "<span style='font-size:8px;'>".$model->product_name."</span>";
+                },
+            ],
             'quantity',
             'in_one_price',
             'in_price',
             'lot_number',
             'expiration_date_one',
             'comment',
-            'receiver_short',
+            [
+                'label' => '收货方简写',
+                'format'=> 'raw',
+                'attribute'=> 'receiver_short',
+                'value' => function($model){
+                    return "<span style='font-size:8px;'>".$model->receiver_short."</span>";
+                },
+            ],
             'type',
             //'code_one',
             //'code_two',

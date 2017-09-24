@@ -40,14 +40,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     <td>
                         <input type="text" class="form-control search" id="model" value="<?=str_ireplace("  ", " +", Yii::$app->request->get('model'))?>">
                     </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td><?=$count_quantity?></td>
+                    <td><?=$count_in_price?></td>
+                    <td><?=$count_inin_quantity?></td>
+                    <td><?=$count_inin_price?></td>
+                    <td><?=$count_sale_quantity?></td>
+                    <td><?=$count_sale_price?></td>
+                    <td><?=$count_quantity-$count_inin_quantity-$count_sale_quantity?></td>
+                    <td><?=$count_in_price-$count_inin_price-$count_sale_price?></td>
                 </tr>
             </thead>
             <tbody>

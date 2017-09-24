@@ -24,13 +24,20 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
 //            ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+//            'id',
             //'number',
             'sale_number',
             'bill_number',
             'custom',
             'model',
-            'product_name',
+            [
+                'label' => '产品名称',
+                'format'=> 'raw',
+                'attribute'=> 'product_name',
+                'value' => function($model){
+                    return "<span style='font-size:8px;'>".$model->product_name."</span>";
+                },
+            ],
             'quantity',
             'in_one_price',
             'in_price',

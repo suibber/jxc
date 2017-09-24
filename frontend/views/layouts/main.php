@@ -27,6 +27,17 @@ AppAsset::register($this);
         body {
             overflow-x: scroll;
         }
+        .container {
+            width:100%;
+        }
+        .filters {
+            font-weight:bold;
+            background-color:#eee;
+            color:blue;
+        }
+        tr td {
+            vertical-align:middle !important;
+        }
     </style>
 </head>
 <body onload="enable()">

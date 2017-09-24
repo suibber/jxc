@@ -47,10 +47,9 @@ class FlowOut extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['quantity'], 'integer'],
             [['in_one_price', 'in_price'], 'number'],
             [['created_at', 'updated_at'], 'safe'],
-            [['number', 'out_number', 'bill_number', 'out_store', 'code_one', 'code_two', 'sale_number', 'model', 'expiration_date_one', 'expiration_date_two', 'type', 'operator'], 'string', 'max' => 100],
+            [['quantity', 'number', 'out_number', 'bill_number', 'out_store', 'code_one', 'code_two', 'sale_number', 'model', 'expiration_date_one', 'expiration_date_two', 'type', 'operator'], 'string', 'max' => 100],
             [['lot_number', 'receiver_short'], 'string', 'max' => 200],
             [['comment', 'receiver', 'product_name'], 'string', 'max' => 400],
         ];

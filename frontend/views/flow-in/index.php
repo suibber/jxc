@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
 //            ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+//            'id',
             //'number',
             'in_number',
             'order_number',
@@ -32,7 +32,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'bill_number',
             'product_suppliers',
             'model',
-            'product_name',
+            [
+                'label' => '产品名称',
+                'format'=> 'raw',
+                'attribute'=> 'product_name',
+                'value' => function($model){
+                    return "<span style='font-size:8px;'>".$model->product_name."</span>";
+                },
+            ],
             'quantity',
             'in_one_price',
             'in_price',

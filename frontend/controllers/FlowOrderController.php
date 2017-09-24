@@ -209,17 +209,19 @@ class FlowOrderController extends Base
         $orderInfo = FlowOrder::getOrderInfoByOrderNumber($orderNumber, $model);
         if (!$orderInfo) {
             $orderInfo = Product::find()
-                ->where(['like', 'model', $model])
+                ->where(['model' => $model])
                 ->asArray()
                 ->one();
             $orderInfo['discount_price'] = $orderInfo['price'];
             $orderInfo['product_name'] = $orderInfo['name'];
         } else {
-            $orderInfo2 = Product::find()
-                ->where(['like', 'model', $model])
-                ->asArray()
-                ->one();
-            $orderInfo['type'] = $orderInfo2['type'];
+            if ($model) {
+                $orderInfo2 = Product::find()
+                    ->where(['like', 'model', $model])
+                    ->asArray()
+                    ->one();
+                $orderInfo['type'] = $orderInfo2['type'];
+            }
         }
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return [
@@ -243,6 +245,43 @@ class FlowOrderController extends Base
         if ($type) {
             $query = $query->andWhere(['like', 'product_suppliers', $type]);
         }
+        $query = $query->orderBy(["id" => SORT_DESC]);
+
+
+        // 计算sum - start
+        $countLimit = Yii::$app->params["countLimit"];
+        $listAll = $query
+            ->limit($countLimit)
+            ->asArray()->all();
+        $countQuantityOrder = 0;
+        $countPriceOrder = 0.00;
+        $count_pay_price = 0.00;
+        $count_pay_price_not = 0.00;
+        $count_bill_price = 0.00;
+        $count_in_quantity = 0;
+        $count_in_price = 0.00;
+        foreach ($listAll as $key => $item) {
+
+            $outInfo = FlowIn::find()
+                ->select("sum(quantity) quantity,sum(in_price) in_price")
+                ->where([
+                    'order_number' => $item['order_number'],
+                ])
+                ->groupBy("number")
+                ->asArray()
+                ->one();
+            if ($outInfo) { 
+                $count_in_quantity = $outInfo['quantity'];
+                $count_in_price = $outInfo['in_price'];
+            }
+
+            $countQuantityOrder += $item['quantity'];
+            $countPriceOrder += $item['order_price'];
+            $count_pay_price += $item['pay_price'];
+            $count_pay_price_not += $item['pay_price_not'];
+            $count_bill_price += $item['bill_price'];
+        } 
+        // 计算sum - end
 
         $pages =  new Pagination(['pageSize'=>Yii::$app->params['pageSize'],
             'totalCount' => $query->count()]);
@@ -279,6 +318,13 @@ class FlowOrderController extends Base
         return $this->render('store', [
             'list' => $list,
             'pages' => $pages,
+            'countQuantityOrder' => $countQuantityOrder,
+            'countPriceOrder' => sprintf("%.2f", $countPriceOrder),
+            'count_pay_price' => sprintf("%.2f", $count_pay_price),
+            'count_pay_price_not' => sprintf("%.2f", $count_pay_price_not),
+            'count_bill_price' => sprintf("%.2f", $count_bill_price),
+            'count_in_quantity' => $count_in_quantity,
+            'count_in_price' => sprintf("%.2f", $count_in_price),
         ]);
     }
 

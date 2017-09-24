@@ -24,12 +24,26 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
 //            ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+//            'id',
 //            'number',
             'order_number',
             'bill_number',
-            'product_suppliers',
-            'product_name',
+            [
+                'label' => '供应商',
+                'format'=> 'raw',
+                'attribute'=> 'product_suppliers',
+                'value' => function($model){
+                    return "<span style='font-size:8px;'>".$model->product_suppliers."</span>";
+                },
+            ],
+            [
+                'label' => '产品名称',
+                'format'=> 'raw',
+                'attribute'=> 'product_name',
+                'value' => function($model){
+                    return "<span style='font-size:8px;'>".$model->product_name."</span>";
+                },
+            ],
             'model',
             'quantity',
             'product_price',

@@ -231,6 +231,57 @@ class FlowOutController extends Base
             $query = $query->andWhere(['like', 'model', $model]);
         }
 
+        // 计算sum - start
+        $countLimit = Yii::$app->params["countLimit"];
+        $listAll = $query
+            ->limit($countLimit)
+            ->asArray()->all();
+        $count_quantity = 0;
+        $count_in_price = 0.00;
+        $count_inin_quantity = 0;
+        $count_inin_price = 0.00;
+        $count_sale_quantity = 0;
+        $count_sale_price = 0.00;
+        foreach ($listAll as $key => $item) {
+
+
+            $outInfo = FlowIn::find()
+                ->select("sum(quantity) quantity,sum(in_price) in_price")
+                ->where([
+                    'product_suppliers' => $item['receiver'],
+                    'type' => $item['type'],
+                    'model' => $item['model'],
+                ])
+                ->groupBy("product_suppliers,type,model")
+                ->asArray()
+                ->one();
+            $count_inin_quantity = 0;
+            $count_inin_price = 0;
+            if ($outInfo) { 
+                $count_inin_quantity += $outInfo['quantity'];
+                $count_inin_price += $outInfo['in_price'];
+            }
+            $saleInfo = FlowSale::find()
+                ->select("sum(quantity) quantity,sum(in_price) in_price")
+                ->where([
+                    'custom' => $item['receiver'],
+                    'model' => $item['model'],
+                ])
+                ->groupBy("custom,model")
+                ->asArray()
+                ->one();
+            $count_sale_quantity = 0;
+            $count_sale_price = 0;
+            if ($outInfo) { 
+                $count_sale_quantity += $saleInfo['quantity'];
+                $count_sale_price += $saleInfo['in_price'];
+            }
+
+            $count_quantity += $item['quantity'];
+            $count_in_price += $item['in_price'];
+        } 
+        // 计算sum - end
+
         $pages =  new Pagination(['pageSize'=>Yii::$app->params['pageSize'],
             'totalCount' => $query->count()]);
 
@@ -274,6 +325,12 @@ class FlowOutController extends Base
         return $this->render('store', [
             'list' => $list,
             'pages' => $pages,
+            'count_quantity' => $count_quantity,
+            'count_in_price' => sprintf("%.2f", $count_in_price),
+            'count_inin_quantity' => $count_inin_quantity,
+            'count_inin_price' => sprintf("%.2f", $count_inin_price),
+            'count_sale_quantity' => $count_sale_quantity,
+            'count_sale_price' => sprintf("%.2f", $count_sale_price),
         ]);
     }
 }

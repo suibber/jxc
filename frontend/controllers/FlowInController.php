@@ -53,11 +53,16 @@ class FlowInController extends Base
         }
 
         // 计算sum - start
+        $countLimit = Yii::$app->params["countLimit"];
         $listAll = $query
-            ->limit(1000)
+            ->limit($countLimit)
             ->asArray()->all();
         $countQuantity = 0;
         $countPrice = 0.00;
+        $countQuantityIn = 0;
+        $countQuantityOut = 0;
+        $countPriceIn = 0.00;
+        $countPriceOut = 0.00;
         foreach ($listAll as $key => $item) {
             $outInfo = FlowOut::find()
                 ->select("sum(quantity) quantity,sum(in_price) in_price")
@@ -77,11 +82,13 @@ class FlowInController extends Base
                 $outQuantity = $outInfo['quantity'];
                 $outPrice = $outInfo['in_price'];
             }
-            $storeQuantity = $item['quantity'] - $outQuantity;
-            $storePrice = $item['in_price'] - $outPrice;
-            $countQuantity += $storeQuantity;
-            $countPrice += $storePrice;
+            $countQuantityIn += $item['quantity'];
+            $countPriceIn += $item['in_price'];
+            $countQuantityOut += $outQuantity;
+            $countPriceOut += $outPrice;
         } 
+        $countPrice = $countPriceIn - $countPriceOut;
+        $countQuantity = $countQuantityIn - $countQuantityOut;
         // 计算sum - end
 
         $count = $query->count();
@@ -115,7 +122,11 @@ class FlowInController extends Base
             'pages' => $pages,
             'count' => $count,
             'countQuantity' => $countQuantity,
-            'countPrice' => $countPrice,
+            'countPrice' => sprintf("%.2f", $countPrice),
+            'countQuantityIn' => $countQuantityIn,
+            'countPriceIn' => sprintf("%.2f", $countPriceIn),
+            'countQuantityOut' => $countQuantityOut,
+            'countPriceOut' => sprintf("%.2f", $countPriceOut),
         ]);
     }
 
@@ -292,7 +303,7 @@ class FlowInController extends Base
             ->one();
         if (!$info) {
             $info = Product::find()
-                ->where(['like', 'model', $model])
+                ->where(['model' => $model])
                 ->asArray()
                 ->one();
             $info['in_one_price'] = $info['price'];

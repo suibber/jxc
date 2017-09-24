@@ -38,12 +38,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     <td>
                         <input type="text" class="form-control search" id="model" value="<?=str_ireplace("  ", " +", Yii::$app->request->get('model'))?>">
                     </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>总：<?=$countQuantity?><br/ >1000条内有效</td>
-                    <td>总：<?=$countPrice?><br/ >1000条内有效</td>
+                    <td><?=$countQuantityIn?></td>
+                    <td><?=$countPriceIn?></td>
+                    <td><?=$countQuantityOut?></td>
+                    <td><?=$countPriceOut?></td>
+                    <td><?=$countQuantity?></td>
+                    <td><?=$countPrice?></td>
                 </tr>
             </thead>
             <tbody>

@@ -219,6 +219,7 @@ class FlowSaleController extends Controller
         if ($custom) {
             $query = $query->andWhere(['like', 'custom', $custom]);
         }
+        $query = $query->orderBy(["id" => SORT_DESC]);
 
         $pages =  new Pagination(['pageSize'=>Yii::$app->params['pageSize'],
             'totalCount' => $query->count()]);

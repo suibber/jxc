@@ -14,7 +14,7 @@ $this->title = '亨通瑞鑫（北京）科技有限公司出入库管理系统'
 
                 </p>
                 <p>
-                    <a class="btn btn-default" href="/flow-order/index">点击进入</a></p>
+                    <a class="btn btn-default" href="/flow-order/index?sort=-id">点击进入</a></p>
             </div>
             <div class="col-lg-3">
                 <h2>入库</h2>
@@ -22,7 +22,7 @@ $this->title = '亨通瑞鑫（北京）科技有限公司出入库管理系统'
 
                 </p>
                 <p>
-                    <a class="btn btn-default" href="/flow-in/index">点击进入</a></p>
+                    <a class="btn btn-default" href="/flow-in/index?sort=-id">点击进入</a></p>
             </div>
             <div class="col-lg-3">
                 <h2>出库</h2>
@@ -30,7 +30,7 @@ $this->title = '亨通瑞鑫（北京）科技有限公司出入库管理系统'
 
                 </p>
                 <p>
-                    <a class="btn btn-default" href="/flow-out/index">点击进入</a></p>
+                    <a class="btn btn-default" href="/flow-out/index?sort=-id">点击进入</a></p>
             </div>
             <div class="col-lg-3">
                 <h2>销售</h2>
@@ -38,7 +38,7 @@ $this->title = '亨通瑞鑫（北京）科技有限公司出入库管理系统'
 
                 </p>
                 <p>
-                    <a class="btn btn-default" href="/flow-sale/index">点击进入</a></p>
+                    <a class="btn btn-default" href="/flow-sale/index?sort=-id">点击进入</a></p>
             </div>
         </div>
         <br><br>

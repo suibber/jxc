@@ -44,16 +44,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     <td>
                         <input type="text" class="form-control search" id="type" value="<?=Yii::$app->request->get('type')?>">
                     </td>
+                    <td><?=$countQuantityOrder?></td>
+                    <td><?=$countPriceOrder?></td>
                     <td></td>
+                    <td><?=$count_pay_price?></td>
+                    <td><?=$count_pay_price_not?></td>
                     <td></td>
+                    <td><?=$count_in_quantity?></td>
+                    <td><?=$count_in_price?></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td><?=$count_bill_price?></td>
                     <td></td>
                     <td></td>
                     <td></td>

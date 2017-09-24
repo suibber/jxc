@@ -47,10 +47,9 @@ class FlowIn extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['quantity'], 'integer'],
             [['in_one_price', 'in_price'], 'number'],
             [['created_at', 'updated_at'], 'safe'],
-            [['number', 'in_number', 'bill_number', 'order_number', 'in_store', 'code_one', 'code_two', 'expiration_date_one', 'expiration_date_two', 'model', 'type', 'operator'], 'string', 'max' => 100],
+            [['quantity', 'number', 'in_number', 'bill_number', 'order_number', 'in_store', 'code_one', 'code_two', 'expiration_date_one', 'expiration_date_two', 'model', 'type', 'operator'], 'string', 'max' => 100],
             [['lot_number', 'product_suppliers_short'], 'string', 'max' => 200],
             [['comment', 'product_suppliers', 'product_name'], 'string', 'max' => 400],
         ];
