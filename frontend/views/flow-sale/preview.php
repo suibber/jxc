@@ -37,7 +37,7 @@
         </tr>
     <?php } ?>
     <tr style="background-color:#efefef;">
-        <td>付款日期</td>
+        <td>开票日期</td>
         <td><?=date("Y-m-d", time())?></td>
         <td colspan=1>总计</td>
         <td colspan=2><?=$total?></td>

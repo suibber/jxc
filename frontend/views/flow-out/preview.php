@@ -46,7 +46,7 @@
         <td>总计</td>
         <td colspan=2><?=$total?></td>
         <td colspan=2>¥<?=$totalPrice?></td>
-        <td>付款日期</td>
+        <td>出库日期</td>
         <td><?=date("Y-m-d", time())?></td>
     </tr>
     <tr style="background-color:#efefef;">

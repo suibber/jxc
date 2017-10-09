@@ -23,8 +23,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     <th>产品型号</th>
                     <th>入库数量</th>
                     <th>入库金额</th>
-                    <th>出库金额</th>
                     <th>出库数量</th>
+                    <th>出库金额</th>
                     <th>库存数量</th>
                     <th>库存金额</th>
                 </tr>

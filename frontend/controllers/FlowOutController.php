@@ -215,7 +215,7 @@ class FlowOutController extends Base
         $query = FlowOut::find()
             ->select("receiver,receiver_short,type,model,sum(quantity) quantity,sum(in_price) in_price")
             ->orderBy(["type" => SORT_DESC])
-            ->groupBy("receiver,type,model");
+            ->groupBy("receiver_short,type,model");
 
         $receiver = Yii::$app->request->get('receiver');
         $type = Yii::$app->request->get('type');
@@ -255,14 +255,12 @@ class FlowOutController extends Base
                 ->groupBy("product_suppliers,type,model")
                 ->asArray()
                 ->one();
-            $count_inin_quantity = 0;
-            $count_inin_price = 0;
             if ($outInfo) { 
                 $count_inin_quantity += $outInfo['quantity'];
                 $count_inin_price += $outInfo['in_price'];
             }
             $saleInfo = FlowSale::find()
-                ->select("sum(quantity) quantity,sum(in_price) in_price")
+                ->select("sum(quantity) quantity,sum(sale_price) in_price")
                 ->where([
                     'custom' => $item['receiver'],
                     'model' => $item['model'],
@@ -270,9 +268,7 @@ class FlowOutController extends Base
                 ->groupBy("custom,model")
                 ->asArray()
                 ->one();
-            $count_sale_quantity = 0;
-            $count_sale_price = 0;
-            if ($outInfo) { 
+            if ($saleInfo) { 
                 $count_sale_quantity += $saleInfo['quantity'];
                 $count_sale_price += $saleInfo['in_price'];
             }
@@ -306,7 +302,7 @@ class FlowOutController extends Base
                 $list[$key]['inin_price'] = $outInfo['in_price'];
             }
             $saleInfo = FlowSale::find()
-                ->select("sum(quantity) quantity,sum(in_price) in_price")
+                ->select("sum(quantity) quantity,sum(sale_price) in_price")
                 ->where([
                     'custom' => $item['receiver'],
                     'model' => $item['model'],
@@ -316,7 +312,7 @@ class FlowOutController extends Base
                 ->one();
             $list[$key]['sale_quantity'] = 0;
             $list[$key]['sale_price'] = 0;
-            if ($outInfo) { 
+            if ($saleInfo) { 
                 $list[$key]['sale_quantity'] = $saleInfo['quantity'];
                 $list[$key]['sale_price'] = $saleInfo['in_price'];
             }
