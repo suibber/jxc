@@ -10,6 +10,7 @@ use yii\widgets\LinkPager;
 
 $this->title = '公司库存查询'.'（共'.$count.'条数据）';
 $this->params['breadcrumbs'][] = $this->title;
+$isSale = Yii::$app->authManager->getAssignment('sale', Yii::$app->user->id)?1:0;
 ?>
 <div class="flow-in-index">
 
@@ -22,11 +23,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     <th>分类</th>
                     <th>产品型号</th>
                     <th>入库数量</th>
-                    <th>入库金额</th>
+                    <th <?=$isSale?'style="display:none"':''?>>入库金额</th>
                     <th>出库数量</th>
-                    <th>出库金额</th>
+                    <th <?=$isSale?'style="display:none"':''?>>出库金额</th>
                     <th>库存数量</th>
-                    <th>库存金额</th>
+                    <th <?=$isSale?'style="display:none"':''?>>库存金额</th>
                 </tr>
                 <tr class="filters">
                     <td>
@@ -39,11 +40,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         <input type="text" class="form-control search" id="model" value="<?=str_ireplace("  ", " +", Yii::$app->request->get('model'))?>">
                     </td>
                     <td><?=$countQuantityIn?></td>
-                    <td><?=$countPriceIn?></td>
+                    <td <?=$isSale?'style="display:none"':''?>><?=$countPriceIn?></td>
                     <td><?=$countQuantityOut?></td>
-                    <td><?=$countPriceOut?></td>
+                    <td <?=$isSale?'style="display:none"':''?>><?=$countPriceOut?></td>
                     <td><?=$countQuantity?></td>
-                    <td><?=$countPrice?></td>
+                    <td <?=$isSale?'style="display:none"':''?>><?=$countPrice?></td>
                 </tr>
             </thead>
             <tbody>
@@ -53,11 +54,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     <td><?=$item['type']?></td>
                     <td><?=$item['model']?></td>
                     <td><?=$item['quantity']?></td>
-                    <td><?=$item['in_price']?></td>
-                    <td><?=$item['out_price']?></td>
+                    <td <?=$isSale?'style="display:none"':''?>><?=$item['in_price']?></td>
+                    <td <?=$isSale?'style="display:none"':''?>><?=$item['out_price']?></td>
                     <td><?=$item['out_quantity']?></td>
                     <td><?=$item['quantity']-$item['out_quantity']?></td>
-                    <td><?=$item['in_price']-$item['out_price']?></td>
+                    <td <?=$isSale?'style="display:none"':''?>><?=$item['in_price']-$item['out_price']?></td>
                 </tr>
             <?php } ?>
             </tbody>

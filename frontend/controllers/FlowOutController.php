@@ -222,7 +222,7 @@ class FlowOutController extends Base
         $model = Yii::$app->request->get('model');
         $model = str_ireplace("  ", " +", $model);
         if ($receiver) {
-            $query = $query->andWhere(['like', 'receiver', $receiver]);
+            $query = $query->andWhere(['like', 'receiver_short', $receiver]);
         }
         if ($type) {
             $query = $query->andWhere(['like', 'type', $type]);
@@ -248,11 +248,11 @@ class FlowOutController extends Base
             $outInfo = FlowIn::find()
                 ->select("sum(quantity) quantity,sum(in_price) in_price")
                 ->where([
-                    'product_suppliers' => $item['receiver'],
+                    'product_suppliers_short' => $item['receiver_short'],
                     'type' => $item['type'],
                     'model' => $item['model'],
                 ])
-                ->groupBy("product_suppliers,type,model")
+                ->groupBy("product_suppliers_short,type,model")
                 ->asArray()
                 ->one();
             if ($outInfo) { 
@@ -260,12 +260,12 @@ class FlowOutController extends Base
                 $count_inin_price += $outInfo['in_price'];
             }
             $saleInfo = FlowSale::find()
-                ->select("sum(quantity) quantity,sum(sale_price) in_price")
+                ->select("sum(quantity) quantity,sum(in_price) in_price")
                 ->where([
-                    'custom' => $item['receiver'],
+                    'custom_short' => $item['receiver_short'],
                     'model' => $item['model'],
                 ])
-                ->groupBy("custom,model")
+                ->groupBy("custom_short,model")
                 ->asArray()
                 ->one();
             if ($saleInfo) { 
@@ -288,7 +288,7 @@ class FlowOutController extends Base
             $outInfo = FlowIn::find()
                 ->select("sum(quantity) quantity,sum(in_price) in_price")
                 ->where([
-                    'product_suppliers' => $item['receiver'],
+                    'product_suppliers_short' => $item['receiver_short'],
                     'type' => $item['type'],
                     'model' => $item['model'],
                 ])
@@ -302,12 +302,12 @@ class FlowOutController extends Base
                 $list[$key]['inin_price'] = $outInfo['in_price'];
             }
             $saleInfo = FlowSale::find()
-                ->select("sum(quantity) quantity,sum(sale_price) in_price")
+                ->select("sum(quantity) quantity,sum(in_price) in_price")
                 ->where([
-                    'custom' => $item['receiver'],
+                    'custom_short' => $item['receiver_short'],
                     'model' => $item['model'],
                 ])
-                ->groupBy("custom,model")
+                ->groupBy("custom_short,model")
                 ->asArray()
                 ->one();
             $list[$key]['sale_quantity'] = 0;
