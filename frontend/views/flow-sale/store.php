@@ -40,7 +40,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     </td>
                     <td></td>
                     <td></td>
-                    <td></td>
+                    <td>
+                        <input type="text" class="form-control search" id="sale_man" value="<?=Yii::$app->request->get('sale_man')?>">
+                    </td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -82,7 +84,8 @@ $this->params['breadcrumbs'][] = $this->title;
 $(".search").on('change', function(){
     var in_store = $("#in_store").val();
     var type = $("#type").val();
-    var url = "/flow-sale/store?in_store="+in_store+"&type="+type;
+    var sale_man = $("#sale_man").val();
+    var url = "/flow-sale/store?in_store="+in_store+"&type="+type+"&sale_man="+sale_man;
     window.location.href = url;
 });
 

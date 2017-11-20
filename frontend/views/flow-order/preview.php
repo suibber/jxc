@@ -9,7 +9,7 @@
         <td colspan=3>供应商：<?=$datas['supplier']?></td>
         <td colspan=4>单据编号：<?=$datas['orderNumber']?></td>
     </tr>
-    <tr style="background-color:#efefef;">
+    <tr style="">
         <td style="font-weight:bold;">序号</td>
         <td style="font-weight:bold;">产品名称</td>
         <td style="font-weight:bold;">规格型号</td>
@@ -26,7 +26,7 @@
         $total += $item['quantity'];
         $totalPrice += $item['order_price'];
     ?>
-        <tr style="background-color:#efefef;">
+        <tr style="">
             <td><?=$item['bill_number']?></td>
             <td><?=$item['product_name']?></td>
             <td><?=$item['model']?></td>
@@ -36,14 +36,14 @@
             <td>¥<?=$item['order_price']?></td>
         </tr>
     <?php } ?>
-    <tr style="background-color:#efefef;">
+    <tr style="">
         <td>付款日期</td>
         <td><?=date("Y-m-d", time())?></td>
         <td>总计</td>
         <td colspan=2><?=$total?></td>
         <td colspan=2>¥<?=$totalPrice?></td>
     </tr>
-    <tr style="background-color:#efefef;">
+    <tr style="">
         <td>备注</td>
         <td colspan=6>
             <?php foreach ($list as $item) { ?> 

@@ -13,7 +13,7 @@
         <td colspan=4></td>
         <td colspan=5>订货/出库单号：<?=$datas['orderNumber']?></td>
     </tr>
-    <tr style="background-color:#efefef;">
+    <tr style="">
         <td style="font-weight:bold;">序号</td>
         <td style="font-weight:bold;">产品名称</td>
         <td style="font-weight:bold;">规格型号</td>
@@ -32,7 +32,7 @@
         $total += $item['quantity'];
         $totalPrice += $item['in_price'];
     ?>
-        <tr style="background-color:#efefef;">
+        <tr style="">
             <td><?=$item['bill_number']?></td>
             <td><?=$item['product_name']?></td>
             <td><?=$item['model']?></td>
@@ -44,7 +44,7 @@
             <td><?=$item['expiration_date_one']?></td>
         </tr>
     <?php } ?>
-    <tr style="background-color:#efefef;">
+    <tr style="">
         <td>入库库房</td>
         <td><?=$datas['inStore']?></td>
         <td>总计</td>
@@ -53,7 +53,7 @@
         <td>入库日期</td>
         <td><?=date("Y-m-d", time())?></td>
     </tr>
-    <tr style="background-color:#efefef;">
+    <tr style="">
         <td>备注</td>
         <td colspan=8>
             <?php foreach ($list as $item) { ?> 

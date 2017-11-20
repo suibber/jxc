@@ -213,11 +213,15 @@ class FlowSaleController extends Controller
 
         $sale_number = Yii::$app->request->get('in_store');
         $custom = Yii::$app->request->get('type');
+        $sale_man = Yii::$app->request->get('sale_man');
         if ($sale_number) {
             $query = $query->andWhere(['like', 'sale_number', $sale_number]);
         }
         if ($custom) {
             $query = $query->andWhere(['like', 'custom', $custom]);
+        }
+        if ($sale_man) {
+            $query = $query->andWhere(['like', 'salesman', $sale_man]);
         }
         $query = $query->orderBy(["id" => SORT_DESC]);
 
