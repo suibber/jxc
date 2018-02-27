@@ -292,7 +292,7 @@ class FlowOutController extends Base
                     'type' => $item['type'],
                     'model' => $item['model'],
                 ])
-                ->groupBy("product_suppliers,type,model")
+                ->groupBy("product_suppliers_short,type,model")
                 ->asArray()
                 ->one();
             $list[$key]['inin_quantity'] = 0;
