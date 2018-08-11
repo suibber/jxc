@@ -6,10 +6,12 @@ use Yii;
 use common\models\FlowSale;
 use common\models\FlowSaleSearch;
 use common\models\Customer;
+use common\models\AuthAssignment;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\Pagination;
+use yii\filters\AccessControl;
 
 /**
  * FlowSaleController implements the CRUD actions for FlowSale model.
@@ -207,6 +209,13 @@ class FlowSaleController extends Controller
 
     public function actionStore()
     {
+        $auth = false;
+        $user_id = Yii::$app->user->identity->id;
+        $auth = AuthAssignment::HasRole($user_id, "admin");
+        if (!$auth) {
+            throw new \yii\web\ForbiddenHttpException; 
+        }
+
         $query = FlowSale::find()
             ->select("sale_number,custom,sum(quantity) quantity,sum(sale_price) sale_price,salesman,bill_number2,bill_price,bill_status,reture_price,return_time,return_status")
             ->groupBy("sale_number");

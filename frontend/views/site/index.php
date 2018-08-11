@@ -54,7 +54,7 @@ $isAdmin = Yii::$app->authManager->getAssignment('admin', Yii::$app->user->id)?1
                 <p>
                     <a class="btn btn-default" href="/flow-order/store">点击进入</a></p>
             </div>
-            <div class="col-lg-3">
+            <div class="col-lg-3" <?=$isSale?'style="display:none"':''?>>
                 <h2>销售状态明细</h2>
                 <p>
 

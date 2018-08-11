@@ -64,4 +64,11 @@ class AuthAssignment extends \yii\db\ActiveRecord
     {
         return new AuthAssignmentQuery(get_called_class());
     }
+
+    public static function HasRole($id, $role)
+    {
+        $i = AuthAssignment::find()->where(["user_id" => $id])->asArray()->one();
+        $name = !empty($i["item_name"]) ? $i["item_name"] : "";
+        return ($name == $role);
+    }
 }
