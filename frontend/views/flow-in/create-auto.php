@@ -151,7 +151,37 @@ function setCodeOne(data,id){
                 expiration = parseExpiration(expiration);
                 $("#expiration_date_one_"+id).val(expiration);
             }
-            setModel('',id,model)
+
+            var newData = "";
+            if (code.substr(16,2) == '17') {
+                newData = code.substr(18,6);
+            } 
+            if (newData.length == 6) {
+                newData = "20"+newData.substr(0,2)+"-"+newData.substr(2,2)+"-"+newData.substr(4,2);
+            }
+            $("#expiration_date_one_"+id).val(newData);
+            var newCreateData
+            if (code.substr(16,2) == '11') {
+                newCreateData = code.substr(18,6);
+            } 
+            if (code.substr(24,2) == '11') {
+                newCreateData = code.substr(26,6);
+            }
+            var newLot = "";
+            if (code.substr(16,2) == '10' || code.substr(16,2) == '21') {
+                newLot = code.substr(18,code.length-1);
+            } 
+            if (code.substr(24,2) == '10' || code.substr(24,2) == '21') {
+                newLot = code.substr(26,code.length-1);
+            } 
+            if (code.substr(32,2) == '10' || code.substr(32,2) == '21') {
+                newLot = code.substr(34,code.length-1);
+            } 
+            if (newLot.length>0) {
+                $("#lot_number_"+id).val(newLot);
+            }
+            
+            setModel('',id,model);
         }
     );
     console.log(productNumber)
@@ -164,6 +194,35 @@ function setCodeTwo(data,id){
         var expiration = getExpirationFromCodeTwo(code);
         expiration = parseExpiration(expiration);
         $("#expiration_date_one_"+id).val(expiration);
+
+        var newData = "";
+        if (code.substr(0,2) == '17') {
+    	    newData = code.substr(2,6);
+        } 
+        if (newData.length == 6) {
+    	    newData = "20"+newData.substr(0,2)+"-"+newData.substr(2,2)+"-"+newData.substr(4,2);
+        }
+        $("#expiration_date_one_"+id).val(newData);
+        var newCreateData
+        if (code.substr(0,2) == '11') {
+    	    newCreateData = code.substr(2,6);
+        } 
+        if (code.substr(8,2) == '11') {
+    	    newCreateData = code.substr(10,6);
+        }
+        var newLot = "";
+        if (code.substr(0,2) == '10' || code.substr(0,2) == '21') {
+            newLot = code.substr(2,code.length-1);
+        } 
+        if (code.substr(8,2) == '10' || code.substr(8,2) == '21') {
+            newLot = code.substr(10,code.length-1);
+        } 
+        if (code.substr(16,2) == '10' || code.substr(16,2) == '21') {
+            newLot = code.substr(18,code.length-1);
+        } 
+        if (newLot.length>0) {
+            $("#lot_number_"+id).val(newLot);
+        }
     }
 }
 function getLotFromCodeOne(code){
