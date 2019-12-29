@@ -140,6 +140,22 @@ function setCodeOne(data,id){
             $("#model_"+id).val(model);
             $("#product_name_"+id).val(data['name']);
             $("#type_"+id).val(data['type']);
+
+
+            var newLot = "";
+            if (code.substr(16,2) == '10' || code.substr(16,2) == '21') {
+                newLot = code.substr(18,code.length-1);
+            } 
+            if (code.substr(24,2) == '10' || code.substr(24,2) == '21') {
+                newLot = code.substr(26,code.length-1);
+            } 
+            if (code.substr(32,2) == '10' || code.substr(32,2) == '21') {
+                newLot = code.substr(34,code.length-1);
+            } 
+            if (newLot.length>0) {
+                $("#lot_number_"+id).val(newLot);
+            }
+
             setModel('',id,model)
         }
     );
