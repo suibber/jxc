@@ -214,7 +214,7 @@ class FlowOutController extends Base
     {
         $query = FlowOut::find()
             ->select("receiver,receiver_short,type,model,sum(quantity) quantity,sum(in_price) in_price")
-            ->orderBy(["type" => SORT_DESC])
+            ->orderBy(["type" => SORT_DESC, "id" => SORT_DESC])
             ->groupBy("receiver_short,type,model");
 
         $receiver = Yii::$app->request->get('receiver');
@@ -243,8 +243,6 @@ class FlowOutController extends Base
         $count_sale_quantity = 0;
         $count_sale_price = 0.00;
         foreach ($listAll as $key => $item) {
-
-
             $outInfo = FlowIn::find()
                 ->select("sum(quantity) quantity,sum(in_price) in_price")
                 ->where([
